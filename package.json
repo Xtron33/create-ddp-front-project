@@ -1,0 +1,22 @@
+{
+    "name": "create-ddp-project",
+    "version": "0.0.1",
+    "bin": {
+        "create-ddp-project": "./dist/index.js"
+    },
+    "scripts": {
+        "build": "tsc && npm run copy-templates",
+        "copy-templates": "rimraf dist/templates && copyfiles -u 1 src/templates/**/* dist",
+        "dev": "tsc --watch"
+    },
+    "dependencies": {
+        "inquirer": "^12.9.2",
+        "rimraf": "^6.0.1"
+    },
+    "type": "module",
+    "devDependencies": {
+        "@types/inquirer": "^9.0.9",
+        "@types/node": "^24.3.0",
+        "typescript": "^5.9.2"
+    }
+}
