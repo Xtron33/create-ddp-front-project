@@ -1,0 +1,8 @@
+{
+  "extends": ["stylelint-config-standard", "stylelint-prettier/recommended"],
+  "rules": {
+    "selector-class-pattern": ["^[a-zA-Z][a-zA-Z0-9]*(?:__[a-zA-Z0-9]+)?$",   {
+      "message": "Используйте camelCase или BEM-нотацию (например, .blockName__element)"
+    }]
+  }
+}

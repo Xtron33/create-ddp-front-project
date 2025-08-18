@@ -14,6 +14,24 @@ export const reactDevDependencies = [
     "vite-tsconfig-paths"
 ]
 
+export const lintersDevDependencies = [
+    "@typescript-eslint/eslint-plugin",
+    "@typescript-eslint/parser",
+    "eslint",
+    "eslint-config-prettier",
+    "eslint-plugin-import",
+    "eslint-plugin-react",
+    "eslint-plugin-react-hooks",
+    "eslint-plugin-react-refresh",
+    "eslint-plugin-unused-imports",
+    "prettier",
+    "stylelint",
+    "stylelint-config-standard",
+    "stylelint-prettier",
+    "eslint-import-resolver-typescript",
+    "eslint-plugin-prettier"
+]
+
 export const TanstackRouterMainFile = `const router = createRouter({ routeTree })
 
 // Register the router instance for type safety

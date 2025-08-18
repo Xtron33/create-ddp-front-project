@@ -64,6 +64,7 @@ const main = async () => {
     writeFileSync(pkgPath, JSON.stringify(await generatePackageJson(projectName, mainTechnology, router), null, 2))
     writeFileSync(mainPath, generateMainFileReact({router: router as Router}))
 
+    cpSync(path.join(__dirname, `templates/linters`), projectPath, { recursive: true });
     cpSync(path.join(__dirname, `templates/${TechnologyFolders[mainTechnology as Technology]}`), projectPath, { recursive: true });
     if(router){
         cpSync(path.join(__dirname, `templates/routers/${RouterFolders[router as Router]}`), projectPath, { force: true,recursive: true });
@@ -79,6 +80,14 @@ const main = async () => {
         console.error('\n❌ Ошибка при установке зависимостей:');
         console.error(error);
         process.exit(1);
+    }
+
+    try {
+        process.chdir(projectPath); // Переходим в директорию проекта
+        execSync('npx eslint --fix .', { stdio: 'inherit' });
+        execSync('npx prettier . --write', { stdio: 'inherit' });
+    } catch (error) {
+
     }
 
     console.log('\n\n✅ Проект успешно создан\n')
