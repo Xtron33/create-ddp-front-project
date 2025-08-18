@@ -1,4 +1,4 @@
-import {reactDependencies, reactDevDependencies} from "./utils/const.js";
+import {lintersDevDependencies, reactDependencies, reactDevDependencies} from "./utils/const.js";
 import https from "https";
 import {Router, Technology} from "./utils/enum.js";
 
@@ -49,7 +49,7 @@ export async function generatePackageJson(projectName: string, technology: Techn
         switch (technology) {
             case Technology.React: {
                 let dependencies = reactDependencies
-                let devDependencies = reactDevDependencies
+                let devDependencies = [...reactDevDependencies, ...lintersDevDependencies]
 
                 switch (router){
                     case Router.ReactRouter:{
@@ -77,6 +77,7 @@ export async function generatePackageJson(projectName: string, technology: Techn
         name: projectName,
         version: "1.0.0",
         private: true,
+        type: "module",
         scripts: getScripts(),
         ...await getDependencies()
     }
