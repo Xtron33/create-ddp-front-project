@@ -1,8 +1,10 @@
-import {Router} from "./utils/enum.js";
+import {Router, StateManager} from "./utils/enum.js";
 import {TanstackRouterMainFile} from "./utils/const.js";
 
 interface ConfigOptions {
     router?: Router
+    stm: StateManager
+    isQueryNeed: boolean
 }
 
 export const generateMainFileReact = (config: ConfigOptions) => {
@@ -25,6 +27,21 @@ export const generateMainFileReact = (config: ConfigOptions) => {
         case Router.Wouter:
             imports.push('import {Router} from "@routes/index"')
             providers.push('<Router />')
+    }
+
+    if(config.isQueryNeed){
+        imports.push('import {QueryClient, QueryClientProvider} from "@tanstack/react-query"')
+        providers.unshift('<QueryClientProvider client={queryClient}>')
+        providers.push('</QueryClientProvider>')
+        beforeReturn.push('const queryClient = new QueryClient()')
+    }
+
+    switch (config.stm){
+        case StateManager.RTK:
+            imports.push('import {Provider} from "react-redux"')
+            imports.push('import {store} from "./store"')
+            providers.unshift('<Provider store={store}>')
+            providers.push('</Provider>')
     }
 
     return `${imports.join('\n')}
