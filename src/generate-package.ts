@@ -58,6 +58,8 @@ export async function generatePackageJson(projectName: string, technology: Techn
                     }
                     case Router.TanStackRouter:{
                         dependencies.push('@tanstack/react-router')
+                        dependencies.push('@tanstack/react-router-devtools')
+                        devDependencies.push('@tanstack/router-plugin')
                         break
                     }
                     case Router.Wouter:{
