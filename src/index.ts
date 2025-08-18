@@ -20,7 +20,14 @@ const main = async () => {
         type: "input",
         name: "projectName",
         message: "Введите название проекта:",
-        default: "ddp-app"
+        default: "ddp-app",
+        filter: (input: string) => input.trim().toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-_]/g, ""),
+        validate:(input: string) => {
+            if(!input.trim()) {
+                return 'Название проекта не может быть пустым'
+        }
+            return true
+        }
     },
     {
         type: "list",
@@ -51,6 +58,7 @@ const main = async () => {
     const srcPath = path.join(projectPath, "src");
     const mainPath = path.join(srcPath, "main.tsx");
 
+    console.log('\n📦 Генерирую файлы...');
     mkdirSync(projectPath, { recursive: true });
     mkdirSync(srcPath, { recursive: true });
     writeFileSync(pkgPath, JSON.stringify(await generatePackageJson(projectName, mainTechnology, router), null, 2))
@@ -58,8 +66,9 @@ const main = async () => {
 
     cpSync(path.join(__dirname, `templates/${TechnologyFolders[mainTechnology as Technology]}`), projectPath, { recursive: true });
     if(router){
-        cpSync(path.join(__dirname, `templates/routers/${RouterFolders[router as Router]}`), srcPath, { recursive: true });
+        cpSync(path.join(__dirname, `templates/routers/${RouterFolders[router as Router]}`), projectPath, { force: true,recursive: true });
     }
+    console.log('\n✅ Файлы успешно сгенерированы');
 
     try {
         console.log('\n📦 Устанавливаю зависимости...');
@@ -73,8 +82,8 @@ const main = async () => {
     }
 
     console.log('\n\n✅ Проект успешно создан\n')
-    console.log(`cd ${projectName}\n\n`)
-    console.log(`yarn start\n\n`)
+    console.log(`cd ${projectName}\n`)
+    console.log(`yarn dev\n\n`)
 }
 
 main()
