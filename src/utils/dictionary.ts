@@ -1,4 +1,4 @@
-import {Router, StateManager, Technology} from "./enum.js";
+import {Router, StateManager, Technology, UiKit} from "./enum.js";
 
 export const TechnologyFolders: Record<Technology, string> = {
     [Technology.React]: "react",
@@ -26,4 +26,11 @@ export const StateManagerName: Record<StateManager, string> = {
     [StateManager.Zustand]: "Zustand",
     [StateManager.RTK]: "RTK",
     [StateManager.Effector]: "Effector"
+}
+
+export const UiKitName: Record<UiKit, string> = {
+    [UiKit.Without]: "Без UI-кита",
+    [UiKit.Mantine]: "Mantine",
+    [UiKit.GravityUI]: "Gravity UI",
+    [UiKit.MaterialUI]: "Material UI"
 }

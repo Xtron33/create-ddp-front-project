@@ -1,10 +1,12 @@
-import {Router, StateManager} from "./utils/enum.js";
+import {Router, StateManager, UiKit} from "./utils/enum.js";
 import {TanstackRouterMainFile} from "./utils/const.js";
+import {sortImports} from "./utils/helper.js";
 
 interface ConfigOptions {
     router?: Router
     stm: StateManager
     isQueryNeed: boolean
+    ui: UiKit
 }
 
 export const generateMainFileReact = (config: ConfigOptions) => {
@@ -29,6 +31,24 @@ export const generateMainFileReact = (config: ConfigOptions) => {
             providers.push('<Router />')
     }
 
+    switch (config.ui){
+        case UiKit.Mantine:
+            imports.push('import "@mantine/core/styles.css"')
+            imports.push('import {MantineProvider} from "@mantine/core"')
+
+            providers.unshift('<MantineProvider>')
+            providers.push('</MantineProvider>')
+            break
+        case UiKit.GravityUI:
+            imports.push('import "@gravity-ui/uikit/styles/fonts.css"')
+            imports.push('import "@gravity-ui/uikit/styles/styles.css"')
+            imports.push('import {ThemeProvider} from "@gravity-ui/uikit"')
+
+            providers.unshift('<ThemeProvider theme="light">')
+            providers.push('</ThemeProvider>')
+            break
+    }
+
     if(config.isQueryNeed){
         imports.push('import {QueryClient, QueryClientProvider} from "@tanstack/react-query"')
         providers.unshift('<QueryClientProvider client={queryClient}>')
@@ -44,7 +64,9 @@ export const generateMainFileReact = (config: ConfigOptions) => {
             providers.push('</Provider>')
     }
 
-    return `${imports.join('\n')}
+    const sortedImports = sortImports(imports)
+
+    return `${sortedImports.join('\n')}
 
 ${beforeReturn.join('\n')}
 

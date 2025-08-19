@@ -15,3 +15,10 @@ export enum StateManager {
     RTK = "RTK",
     Effector = "Effector"
 }
+
+export enum UiKit {
+    Without = "Without",
+    Mantine = "Mantine",
+    GravityUI = "GravityUI",
+    MaterialUI = "MaterialUI"
+}

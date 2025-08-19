@@ -5,8 +5,15 @@ import path from "path";
 import {cpSync, mkdirSync, writeFileSync} from "fs";
 import {fileURLToPath} from "url";
 import {generatePackageJson} from "./generate-package.js";
-import {Router, StateManager, Technology} from "./utils/enum.js";
-import {RouterFolders, RouterName, StateManageFolder, StateManagerName, TechnologyFolders} from "./utils/dictionary.js";
+import {Router, StateManager, Technology, UiKit} from "./utils/enum.js";
+import {
+    RouterFolders,
+    RouterName,
+    StateManageFolder,
+    StateManagerName,
+    TechnologyFolders,
+    UiKitName
+} from "./utils/dictionary.js";
 import {generateMainFileReact} from "./generate-main-file.js";
 import {execSync} from "child_process";
 import {generateEslintConfig} from "./generate-eslint-config.js";
@@ -57,7 +64,7 @@ const main = async () => {
         router = selectedRouter;
     }
 
-    const {stm, isQueryNeed, isNeedHusky} = await inquirer.prompt([
+    const {stm, isQueryNeed, isNeedHusky, uiKit} = await inquirer.prompt([
         {
             type: "list",
             name: "stm",
@@ -79,6 +86,16 @@ const main = async () => {
             name: "isNeedHusky",
             message: "Настроить пре-коммит (lint-staged) и пре-пуш (build)?",
             default: false
+        },
+        {
+            type: "list",
+            name: "uiKit",
+            message: "Выберите UI-Kit:",
+            choices: Object.values(UiKit).map(ui => ({
+                name: UiKitName[ui],
+                value: ui
+            })),
+            default: UiKit.Without
         }
     ])
 
@@ -91,8 +108,8 @@ const main = async () => {
     console.log('\n📦 Генерирую файлы...');
     mkdirSync(projectPath, { recursive: true });
     mkdirSync(srcPath, { recursive: true });
-    writeFileSync(pkgPath, JSON.stringify(await generatePackageJson(projectName, mainTechnology, router, stm, isQueryNeed), null, 2))
-    writeFileSync(mainPath, generateMainFileReact({router: router as Router, stm, isQueryNeed}))
+    writeFileSync(pkgPath, JSON.stringify(await generatePackageJson(projectName, mainTechnology, router, stm, isQueryNeed, uiKit), null, 2))
+    writeFileSync(mainPath, generateMainFileReact({router: router as Router, stm, isQueryNeed, ui: uiKit}))
     writeFileSync(eslintPath, generateEslintConfig(mainTechnology, isQueryNeed))
 
     cpSync(path.join(__dirname, `templates/linters`), projectPath, { recursive: true });
@@ -126,9 +143,9 @@ const main = async () => {
     try {
         console.log('\n📦 Последние приготовления...');
         process.chdir(projectPath); // Переходим в директорию проекта
-        execSync('npx eslint --fix .', { stdio: 'ignore' });
-        execSync('npx prettier . --write', { stdio: 'ignore' });
-        execSync('npx husky', { stdio: 'ignore' });
+        execSync('npx eslint --fix .', { stdio: 'inherit' });
+        execSync('npx prettier . --write', { stdio: 'inherit' });
+        execSync('npx husky', { stdio: 'inherit' });
     } catch (error) {
         console.error('\n❌ Ошибка при последних приготовлениях:');
         console.error(error);
