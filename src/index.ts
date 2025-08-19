@@ -57,7 +57,7 @@ const main = async () => {
         router = selectedRouter;
     }
 
-    const {stm, isQueryNeed} = await inquirer.prompt([
+    const {stm, isQueryNeed, isNeedHusky} = await inquirer.prompt([
         {
             type: "list",
             name: "stm",
@@ -72,6 +72,12 @@ const main = async () => {
             type: "confirm",
             name: "isQueryNeed",
             message: "Установить TanStack Query?",
+            default: false
+        },
+        {
+            type: "confirm",
+            name: "isNeedHusky",
+            message: "Настроить пре-коммит (lint-staged) и пре-пуш (build)?",
             default: false
         }
     ])
@@ -93,6 +99,9 @@ const main = async () => {
     cpSync(path.join(__dirname, `templates/${TechnologyFolders[mainTechnology as Technology]}`), projectPath, { recursive: true });
     if(router){
         cpSync(path.join(__dirname, `templates/routers/${RouterFolders[router as Router]}`), projectPath, { force: true,recursive: true });
+    }
+    if(isNeedHusky){
+        cpSync(path.join(__dirname, `templates/build_husky`), projectPath, { recursive: true });
     }
 
     switch (stm){
@@ -119,6 +128,7 @@ const main = async () => {
         process.chdir(projectPath); // Переходим в директорию проекта
         execSync('npx eslint --fix .', { stdio: 'ignore' });
         execSync('npx prettier . --write', { stdio: 'ignore' });
+        execSync('npx husky', { stdio: 'ignore' });
     } catch (error) {
         console.error('\n❌ Ошибка при последних приготовлениях:');
         console.error(error);
