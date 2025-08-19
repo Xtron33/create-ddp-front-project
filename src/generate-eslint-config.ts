@@ -1,4 +1,8 @@
-import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended"
+import {Technology} from "./utils/enum.js";
+
+export const generateEslintConfig = (technology: Technology, isNeedQuery: boolean)=> {
+
+    return `import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended"
 import eslintPluginImport from "eslint-plugin-import"
 import eslintPluginUnusedImports from "eslint-plugin-unused-imports"
 
@@ -9,6 +13,7 @@ import reactRefresh from "eslint-plugin-react-refresh"
 import tseslint from "typescript-eslint"
 import { globalIgnores } from "eslint/config"
 import reactPlugin from "eslint-plugin-react"
+${isNeedQuery ? 'import pluginQuery from \'@tanstack/eslint-plugin-query\'' : ''}
 
 export default tseslint.config([
   globalIgnores(["dist"]),
@@ -66,4 +71,8 @@ export default tseslint.config([
     },
   },
   eslintPluginPrettierRecommended,
-])
+  reactPlugin.configs.flat.recommended,
+  reactPlugin.configs.flat['jsx-runtime'],
+  ${isNeedQuery ? '...pluginQuery.configs[\'flat/recommended\']' : ''}
+])`
+}

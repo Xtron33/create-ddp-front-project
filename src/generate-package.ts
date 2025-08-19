@@ -1,6 +1,6 @@
 import {lintersDevDependencies, reactDependencies, reactDevDependencies} from "./utils/const.js";
 import https from "https";
-import {Router, Technology} from "./utils/enum.js";
+import {Router, StateManager, Technology} from "./utils/enum.js";
 
 async function fetchLatestVersion(pkgName: string): Promise<string> {
     return new Promise((resolve, reject) => {
@@ -31,7 +31,7 @@ async function getDependenciesVersion(dependencies: string[], devDependencies: s
     }
 }
 
-export async function generatePackageJson(projectName: string, technology: Technology, router: Router | null) {
+export async function generatePackageJson(projectName: string, technology: Technology, router: Router | null, stm: StateManager, isQueryNeed: boolean) {
     const getScripts = () => {
         switch (technology){
             case Technology.React: {
@@ -66,6 +66,27 @@ export async function generatePackageJson(projectName: string, technology: Techn
                         dependencies.push('wouter')
                         break
                     }
+                }
+
+                switch (stm){
+                    case StateManager.Zustand:{
+                        dependencies.push('zustand')
+                        break
+                    }
+                    case StateManager.RTK:{
+                        dependencies.push('@reduxjs/toolkit')
+                        dependencies.push('react-redux')
+                        break
+                    }
+                    case StateManager.Effector:
+                        dependencies.push('effector')
+                        dependencies.push('effector-react')
+                        break
+                }
+
+                if(isQueryNeed){
+                    dependencies.push("@tanstack/react-query")
+                    devDependencies.push("@tanstack/eslint-plugin-query")
                 }
 
                 return await getDependenciesVersion(dependencies, devDependencies)

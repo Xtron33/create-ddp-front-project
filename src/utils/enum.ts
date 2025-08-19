@@ -8,3 +8,10 @@ export enum Router {
     TanStackRouter = "TanStackRouter",
     Wouter = "Wouter"
 }
+
+export enum StateManager {
+    Without = "Without",
+    Zustand = "Zustand",
+    RTK = "RTK",
+    Effector = "Effector"
+}
