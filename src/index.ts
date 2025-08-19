@@ -9,6 +9,7 @@ import {Router, StateManager, Technology} from "./utils/enum.js";
 import {RouterFolders, RouterName, StateManageFolder, StateManagerName, TechnologyFolders} from "./utils/dictionary.js";
 import {generateMainFileReact} from "./generate-main-file.js";
 import {execSync} from "child_process";
+import {generateEslintConfig} from "./generate-eslint-config.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -78,6 +79,7 @@ const main = async () => {
     const projectPath = path.join(process.cwd(), projectName);
     const pkgPath = path.join(projectPath, "package.json");
     const srcPath = path.join(projectPath, "src");
+    const eslintPath = path.join(projectPath, "eslint.config.js");
     const mainPath = path.join(srcPath, "main.tsx");
 
     console.log('\n📦 Генерирую файлы...');
@@ -85,6 +87,7 @@ const main = async () => {
     mkdirSync(srcPath, { recursive: true });
     writeFileSync(pkgPath, JSON.stringify(await generatePackageJson(projectName, mainTechnology, router, stm, isQueryNeed), null, 2))
     writeFileSync(mainPath, generateMainFileReact({router: router as Router, stm, isQueryNeed}))
+    writeFileSync(eslintPath, generateEslintConfig(mainTechnology, isQueryNeed))
 
     cpSync(path.join(__dirname, `templates/linters`), projectPath, { recursive: true });
     cpSync(path.join(__dirname, `templates/${TechnologyFolders[mainTechnology as Technology]}`), projectPath, { recursive: true });
@@ -112,11 +115,14 @@ const main = async () => {
     }
 
     try {
+        console.log('\n📦 Последние приготовления...');
         process.chdir(projectPath); // Переходим в директорию проекта
-        execSync('npx eslint --fix .', { stdio: 'inherit' });
-        execSync('npx prettier . --write', { stdio: 'inherit' });
+        execSync('npx eslint --fix .', { stdio: 'ignore' });
+        execSync('npx prettier . --write', { stdio: 'ignore' });
     } catch (error) {
-
+        console.error('\n❌ Ошибка при последних приготовлениях:');
+        console.error(error);
+        process.exit(1);
     }
 
     console.log('\n\n✅ Проект успешно создан\n')

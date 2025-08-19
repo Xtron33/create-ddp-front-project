@@ -29,8 +29,10 @@ export const lintersDevDependencies = [
     "stylelint-config-standard",
     "stylelint-prettier",
     "eslint-import-resolver-typescript",
-    "eslint-plugin-prettier"
+    "eslint-plugin-prettier",
+    "husky"
 ]
+
 
 export const TanstackRouterMainFile = `const router = createRouter({ routeTree })
 
