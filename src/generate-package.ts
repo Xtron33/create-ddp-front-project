@@ -1,4 +1,4 @@
-import {lintersDevDependencies, reactDependencies, reactDevDependencies} from "./utils/const.js";
+import {defaultDepencencies, lintersDevDependencies, reactDependencies, reactDevDependencies} from "./utils/const.js";
 import https from "https";
 import {Router, StateManager, Technology} from "./utils/enum.js";
 
@@ -38,8 +38,7 @@ export async function generatePackageJson(projectName: string, technology: Techn
                 return {
                     "dev": "vite",
                     "build": "vite build",
-                    "lint": "eslint vite-project",
-                    "preview": "vite preview"
+                    "lint-staged": "lint-staged"
                 }
             }
         }
@@ -48,7 +47,7 @@ export async function generatePackageJson(projectName: string, technology: Techn
     const getDependencies = async () => {
         switch (technology) {
             case Technology.React: {
-                let dependencies = reactDependencies
+                let dependencies = [...reactDependencies, ...defaultDepencencies]
                 let devDependencies = [...reactDevDependencies, ...lintersDevDependencies]
 
                 switch (router){
@@ -100,6 +99,24 @@ export async function generatePackageJson(projectName: string, technology: Techn
         private: true,
         type: "module",
         scripts: getScripts(),
-        ...await getDependencies()
+        ...await getDependencies(),
+        config: {
+            commitizen: {
+                path: "cz-conventional-changelog"
+            },
+            "cz-custom": {
+                config: ".cz-config.cjs"
+            }
+        },
+        "lint-staged": {
+            "*.{js,jsx,ts,tsx}": [
+                "eslint --fix",
+                "prettier --write"
+            ],
+            "*.{css,scss}": [
+                "stylelint --fix",
+                "prettier --write"
+            ]
+        },
     }
 }

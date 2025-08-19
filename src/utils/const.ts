@@ -30,7 +30,18 @@ export const lintersDevDependencies = [
     "stylelint-prettier",
     "eslint-import-resolver-typescript",
     "eslint-plugin-prettier",
-    "husky"
+    "husky",
+    "commitizen",
+    "cz-custom",
+    "@commitlint/cli",
+    "@commitlint/config-conventional",
+    "lint-staged"
+]
+
+export const defaultDepencencies = [
+    "axios",
+    "uuid",
+    "@mantine/form"
 ]
 
 

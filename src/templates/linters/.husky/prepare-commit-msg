@@ -1,0 +1,11 @@
+# Проверяем Windows
+case "$OS" in
+  *Windows*|*windows*|MINGW*|MSYS*|CYGWIN*)
+    # Запуск нового PowerShell, выполнение команды и автоматическое закрытие
+    powershell.exe -Command "Start-Process powershell -ArgumentList '-NoProfile','-Command','npx cz --hook; exit' -Wait"
+    ;;
+  *)
+    # Unix-подобные системы — просто интерактивно
+    exec < /dev/tty && npx cz --hook
+    ;;
+esac
