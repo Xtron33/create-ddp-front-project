@@ -35,7 +35,8 @@ export const lintersDevDependencies = [
     "cz-custom",
     "@commitlint/cli",
     "@commitlint/config-conventional",
-    "lint-staged"
+    "lint-staged",
+    "vite-plugin-svgr"
 ]
 
 export const defaultDepencencies = [

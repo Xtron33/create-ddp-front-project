@@ -8,7 +8,7 @@ interface ConfigOptions {
 }
 
 export const generateMainFileReact = (config: ConfigOptions) => {
-    const imports: string[] = ['import React from "react"', 'import ReactDOM from "react-dom/client"']
+    const imports: string[] = ['import React from "react"', 'import ReactDOM from "react-dom/client"', 'import "./index.css"']
     const providers: string[] = []
     const beforeReturn: string[] = []
 

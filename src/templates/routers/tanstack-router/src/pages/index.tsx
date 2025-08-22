@@ -1,27 +1,34 @@
 import { useState } from 'react'
 import {createFileRoute} from "@tanstack/react-router"
 
+import Logo from "@assets/icons/ddplogo.svg?react"
+import ReactLogo from "@assets/icons/react.svg?react"
+
+import styles from "./main.module.css"
+
 export const Route = createFileRoute('/')({
     component: Main,
 })
 
 const Main = () => {
-    const [count, setCount] = useState(0)
-
     return (
-        <>
-            <h1>Vite + React</h1>
-            <div className="card">
-                <button onClick={() => setCount((count) => count + 1)}>
-                    count is {count}
-                </button>
-                <p>
-                    Edit <code>src/App.tsx</code> and save to test HMR
-                </p>
+        <div className={styles.bg}>
+            <div className={styles.wrapper}>
+                <Logo width={300} height={100} />+
+                <div className={styles.box}>
+                    {Array(8)
+                        .fill(0)
+                        .map((_, i) => (
+                            <ReactLogo
+                                width={150}
+                                height={150}
+                                className={styles.react}
+                                key={i}
+                                style={{ animationDelay: `${i * 20}ms`, opacity: 1 / (i * 2) }}
+                            />
+                        ))}
+                </div>
             </div>
-            <p className="read-the-docs">
-                Click on the Vite and React logos to learn more
-            </p>
-        </>
+        </div>
     )
 }

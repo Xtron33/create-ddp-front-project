@@ -61,6 +61,7 @@ export default tseslint.config([
       ],
       "no-console": ["error"],
       "unused-imports/no-unused-imports": "error",
+      "import/no-unresolved": ['error', { ignore: ['\\\\.gen$'] }],
     },
     settings: {
       "import/resolver": {

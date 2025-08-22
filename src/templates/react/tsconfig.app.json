@@ -23,11 +23,25 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
     "paths": {
+      "@api/*": ["src/api/*"],
+      "@assets/*": ["src/assets/*"],
+      "@components/*": ["src/components/*"],
+      "@shared/*": ["src/shared/*"],
+      "@store/*": ["src/store/*"],
+      "@styles/*": ["src/styles/*"],
       "@pages/*": ["src/pages/*"],
-      "@routes/*": ["src/routes/*"]
-    }
+      "@routes/*": ["src/routes/*"],
+      "@constants/*": ["src/utils/constants/*"],
+      "@dictionaries/*": ["src/utils/dictionaries/*"],
+      "@enums/*": ["src/utils/enums/*"],
+      "@helpers/*": ["src/utils/helpers/*"],
+      "@hooks/*": ["src/utils/hooks/*"],
+      "#types/*": ["src/utils/*"]
+    },
+    "types": ["vite-plugin-svgr/client"]
   },
   "include": [
-    "src"
+    "src",
+    "vite.config.ts"
   ]
 }
