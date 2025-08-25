@@ -1,6 +1,6 @@
 import {defaultDepencencies, lintersDevDependencies, reactDependencies, reactDevDependencies} from "./utils/const.js";
 import https from "https";
-import {Router, StateManager, Technology} from "./utils/enum.js";
+import {Router, StateManager, Technology, UiKit} from "./utils/enum.js";
 
 async function fetchLatestVersion(pkgName: string): Promise<string> {
     return new Promise((resolve, reject) => {
@@ -31,7 +31,7 @@ async function getDependenciesVersion(dependencies: string[], devDependencies: s
     }
 }
 
-export async function generatePackageJson(projectName: string, technology: Technology, router: Router | null, stm: StateManager, isQueryNeed: boolean) {
+export async function generatePackageJson(projectName: string, technology: Technology, router: Router | null, stm: StateManager, isQueryNeed: boolean, ui: UiKit) {
     const getScripts = () => {
         switch (technology){
             case Technology.React: {
@@ -80,6 +80,22 @@ export async function generatePackageJson(projectName: string, technology: Techn
                     case StateManager.Effector:
                         dependencies.push('effector')
                         dependencies.push('effector-react')
+                        break
+                }
+
+                switch (ui){
+                    case UiKit.Mantine:
+                        dependencies.push("@mantine/core")
+                        dependencies.push("@mantine/hooks")
+                        break
+                    case UiKit.GravityUI:
+                        dependencies.push("@gravity-ui/uikit")
+                        break
+                    case UiKit.MaterialUI:
+                        dependencies.push("@mui/material")
+                        dependencies.push("@emotion/react")
+                        dependencies.push("@emotion/styled")
+                        dependencies.push("@fontsource/roboto")
                         break
                 }
 
