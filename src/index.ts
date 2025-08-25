@@ -126,9 +126,9 @@ const main = async () => {
     try {
         console.log('\n📦 Последние приготовления...');
         process.chdir(projectPath); // Переходим в директорию проекта
-        execSync('npx eslint --fix .', { stdio: 'ignore' });
-        execSync('npx prettier . --write', { stdio: 'ignore' });
-        execSync('npx husky', { stdio: 'ignore' });
+        execSync('npx eslint --fix .', { stdio: 'inherit' });
+        execSync('npx prettier . --write', { stdio: 'inherit' });
+        execSync('npx husky', { stdio: 'inherit' });
     } catch (error) {
         console.error('\n❌ Ошибка при последних приготовлениях:');
         console.error(error);

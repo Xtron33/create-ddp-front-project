@@ -6,7 +6,7 @@
     },
     "scripts": {
         "build": "tsc && npm run copy-templates",
-        "copy-templates": "rimraf dist/templates && copyfiles -a -u 1 src/templates/**/* dist",
+        "copy-templates": "rimraf dist/templates && npx cpx \"src/templates/**/*\" \"dist/templates\" --include-empty-dirs --include-hidden",
         "dev": "tsc --watch"
     },
     "dependencies": {
@@ -15,6 +15,7 @@
     },
     "type": "module",
     "devDependencies": {
+        "@juanm04/cpx": "^2.0.1",
         "@types/inquirer": "^9.0.9",
         "@types/node": "^24.3.0",
         "typescript": "^5.9.2"

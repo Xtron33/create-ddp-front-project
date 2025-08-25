@@ -1,0 +1,56 @@
+.bg {
+  height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #1e1e1e
+    repeating-linear-gradient(
+      45deg,
+      rgb(109 109 109 / 37%),
+      rgb(109 109 109 / 37%) 1%,
+      #1e1e1e 1%,
+      #1e1e1e 10%
+    );
+  background-size: 150px 150px;
+  animation: move-it 2s linear infinite;
+}
+
+.wrapper {
+  color: white;
+  font-size: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 700px;
+}
+
+.react {
+  animation: spin 2s linear infinite;
+  position: absolute;
+}
+
+.box {
+  position: relative;
+  width: 150px;
+  height: 150px;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes move-it {
+  0% {
+    background-position: initial;
+  }
+
+  100% {
+    background-position: 150px 0;
+  }
+}
