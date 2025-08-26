@@ -1,4 +1,10 @@
-import {defaultDepencencies, lintersDevDependencies, reactDependencies, reactDevDependencies} from "./utils/const.js";
+import {
+    defaultDepencencies,
+    lintersDevDependencies,
+    nextDependencies, nextDevDependencies, nextLintersDevDependencies,
+    reactDependencies,
+    reactDevDependencies
+} from "./utils/const.js";
 import https from "https";
 import {Router, StateManager, Technology, UiKit} from "./utils/enum.js";
 
@@ -41,6 +47,14 @@ export async function generatePackageJson(projectName: string, technology: Techn
                     "lint-staged": "lint-staged"
                 }
             }
+            case Technology.Next: {
+                return {
+                    "dev": "next dev --turbopack",
+                    "build": "next build --turbopack",
+                    "start": "next start",
+                    "lint-staged": "lint-staged"
+                }
+            }
         }
     }
 
@@ -66,6 +80,49 @@ export async function generatePackageJson(projectName: string, technology: Techn
                         break
                     }
                 }
+
+                switch (stm){
+                    case StateManager.Zustand:{
+                        dependencies.push('zustand')
+                        break
+                    }
+                    case StateManager.RTK:{
+                        dependencies.push('@reduxjs/toolkit')
+                        dependencies.push('react-redux')
+                        break
+                    }
+                    case StateManager.Effector:
+                        dependencies.push('effector')
+                        dependencies.push('effector-react')
+                        break
+                }
+
+                switch (ui){
+                    case UiKit.Mantine:
+                        dependencies.push("@mantine/core")
+                        dependencies.push("@mantine/hooks")
+                        break
+                    case UiKit.GravityUI:
+                        dependencies.push("@gravity-ui/uikit")
+                        break
+                    case UiKit.MaterialUI:
+                        dependencies.push("@mui/material")
+                        dependencies.push("@emotion/react")
+                        dependencies.push("@emotion/styled")
+                        dependencies.push("@fontsource/roboto")
+                        break
+                }
+
+                if(isQueryNeed){
+                    dependencies.push("@tanstack/react-query")
+                    devDependencies.push("@tanstack/eslint-plugin-query")
+                }
+
+                return await getDependenciesVersion(dependencies, devDependencies)
+            }
+            case Technology.Next: {
+                let dependencies = [...nextDependencies, ...defaultDepencencies]
+                let devDependencies = [...nextDevDependencies, ...nextLintersDevDependencies]
 
                 switch (stm){
                     case StateManager.Zustand:{
