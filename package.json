@@ -1,6 +1,17 @@
 {
     "name": "create-ddp-project",
-    "version": "0.0.1",
+    "description": "Starter template for DDP projects",
+    "author": "https://github.com/Xtron33",
+    "license": "MIT",
+    "version": "1.0",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Xtron33/create-ddp-front-project.git"
+    },
+    "homepage": "https://github.com/Xtron33/create-ddp-front-project",
+    "bugs": {
+        "url": "https://github.com/Xtron33/create-ddp-front-project/issues"
+    },
     "bin": {
         "create-ddp-project": "./dist/index.js"
     },

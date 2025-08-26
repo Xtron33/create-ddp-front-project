@@ -14,9 +14,10 @@ import {
     TechnologyFolders,
     UiKitName
 } from "./utils/dictionary.js";
-import {generateMainFileReact} from "./generate-main-file.js";
+import {generateMainFileNext, generateMainFileReact} from "./generate-main-file.js";
 import {execSync} from "child_process";
 import {generateEslintConfig} from "./generate-eslint-config.js";
+import {generateProvidersNext} from "./generate-providers-next.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -104,12 +105,26 @@ const main = async () => {
     const srcPath = path.join(projectPath, "src");
     const eslintPath = path.join(projectPath, "eslint.config.js");
     const mainPath = path.join(srcPath, "main.tsx");
+    const appPath = path.join(srcPath, "app")
+    const layoutPath = path.join(appPath, "layout.tsx")
+    const providersPath = path.join(appPath, "providers.tsx")
 
     console.log('\n📦 Генерирую файлы...');
     mkdirSync(projectPath, { recursive: true });
     mkdirSync(srcPath, { recursive: true });
+
+    if(mainTechnology === Technology.Next){
+        mkdirSync(appPath, { recursive: true });
+    }
+
     writeFileSync(pkgPath, JSON.stringify(await generatePackageJson(projectName, mainTechnology, router, stm, isQueryNeed, uiKit), null, 2))
-    writeFileSync(mainPath, generateMainFileReact({router: router as Router, stm, isQueryNeed, ui: uiKit}))
+    switch (mainTechnology){
+        case Technology.React:
+            writeFileSync(mainPath, generateMainFileReact({router: router as Router, stm, isQueryNeed, ui: uiKit}))
+            break
+        case Technology.Next:
+            writeFileSync(layoutPath, generateMainFileNext({stm, isQueryNeed, ui: uiKit}))
+    }
     writeFileSync(eslintPath, generateEslintConfig(mainTechnology, isQueryNeed))
 
     cpSync(path.join(__dirname, `templates/linters`), projectPath, { recursive: true });
@@ -119,6 +134,9 @@ const main = async () => {
     }
     if(isNeedHusky){
         cpSync(path.join(__dirname, `templates/build_husky`), projectPath, { recursive: true });
+    }
+    if(isQueryNeed && mainTechnology === Technology.Next){
+        writeFileSync(providersPath, generateProvidersNext({isNeedQuery: isQueryNeed, isRtk: stm === StateManager.RTK, uiKit: uiKit}))
     }
 
     switch (stm){
