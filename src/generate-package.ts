@@ -175,7 +175,7 @@ export async function generatePackageJson(projectName: string, technology: Techn
         ...await getDependencies(),
         config: {
             commitizen: {
-                path: "cz-conventional-changelog"
+                path: "node_modules/cz-custom"
             },
             "cz-custom": {
                 config: ".cz-config.cjs"
